@@ -9,8 +9,9 @@
 	height=25
 	
 	#Font
-	font="-xos4-terminus-medium-r-normal-*-12-120-72-72-c-60-iso8859-1"
-#	font="-nerdypepper-scientifica-medium-r-normal-*-11-80-100-100-c-50-iso10646-1"
+#	font="-xos4-terminus-medium-r-normal-*-12-120-72-72-c-60-iso8859-1"
+	font="-romeovs-creep2-medium-r-normal-*-11-110-75-75-c-50-iso10646-1"
+
 #sourcing solors from xresources and pywal
 . "${HOME}/.cache/wal/colors.sh"
 

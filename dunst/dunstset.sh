@@ -19,5 +19,5 @@ dunst \
 	-cf "$color6" \
 	-frame_color "$color2" \
 	-frame_width 2 \
-	-fn "Terminus 8" \
+	-fn "creep2 8" \
 	-geometry "250x250-20+45" &
