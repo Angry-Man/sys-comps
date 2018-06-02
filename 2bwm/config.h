@@ -123,7 +123,7 @@ static key keys[] = {
     // Bottom right:
     {  MOD ,              XK_n,          teleport,          {.i=TWOBWM_TELEPORT_BOTTOM_RIGHT}},
     // Resize while keeping the window aspect
-    {  MOD ,              XK_o,       resizestep_aspect, {.i=TWOBWM_RESIZE_KEEP_ASPECT_GROW}},
+    {  MOD ,              XK_o,        resizestep_aspect, {.i=TWOBWM_RESIZE_KEEP_ASPECT_GROW}},
     {  MOD ,              XK_p,        resizestep_aspect, {.i=TWOBWM_RESIZE_KEEP_ASPECT_SHRINK}},
     // Full screen window without borders
     {  MOD ,              XK_x,         maximize,          {.i=TWOBWM_FULLSCREEN}},

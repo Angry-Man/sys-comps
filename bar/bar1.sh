@@ -10,18 +10,17 @@ date '+%A, %B %d, %Y | %H:%M:%S'
 
 #Battery
 
-: '
 battery() {
 
-BATC=/sys/class/power_supply/BAT1/capacity
-BATS=/sys/class/power_supply/BAT1/status
+BATC=/sys/class/power_supply/BAT0/capacity
+BATS=/sys/class/power_supply/BAT0/status
 
 # prepend percentage with a '+' if charging, '-' otherwise
-test "'cat $BATS'" = "Charging" && echo -n '+' || echo -n '-'
+[ "`cat $BATS`" = "Charging" ] && echo -n '+' || echo -n '-'
 
 #print out the content
 sed -n p $BATC
-}'
+}
 
 #Sound Level
 
@@ -57,7 +56,7 @@ network() {
    # fi
    # ip link show $eth0 | grep 'state UP' >/dev/null && int=$eth0 ||int=$wifi
 
-    int=enp0s3
+    int=wlp58s0
 
     ping -c 1 8.8.8.8 >/dev/null 2>&1 &&
         echo "$int connected" || echo "$int disconnected"
@@ -71,7 +70,8 @@ while :; do
 	buf="${buf}%{l}%{O10}$(groups)"
 	buf="${buf}%{c}$(clock)"
 	buf="${buf}%{r}Net: $(network) | "
-	buf="${buf}Vol: $(volume)%{O10}"
+	buf="${buf}Vol: $(volume)% | "
+	buf="${buf}Bat: $(battery)%"
 	echo $buf
 
 #
