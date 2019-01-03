@@ -56,10 +56,11 @@ network() {
    # fi
    # ip link show $eth0 | grep 'state UP' >/dev/null && int=$eth0 ||int=$wifi
 
-    int=wlp58s0
+    int= nmcli -t -f active,ssid dev wifi | egrep '^yes' | cut -d\' -f2 | sed 's/....//'
+
 
     ping -c 1 8.8.8.8 >/dev/null 2>&1 &&
-        echo "$int connected" || echo "$int disconnected"
+        echo "$int" || echo "Disconnected"
 }
 
 #Loop to buffer everything
