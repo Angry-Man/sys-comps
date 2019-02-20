@@ -9,7 +9,6 @@ date '+%A, %B %d, %Y | %H:%M:%S'
 }
 
 #Battery
-
 battery() {
 
 BATC=/sys/class/power_supply/BAT0/capacity
@@ -20,6 +19,16 @@ BATS=/sys/class/power_supply/BAT0/status
 
 #print out the content
 sed -n p $BATC
+}
+
+#Backlight
+backlight() {
+#Assign the brightness and max brightness from the systemfiles
+maxbrightness=/sys/class/backlight/intel_backlight/max_brightness
+brightness=/sys/class/backlight/intel_backlight/brightness
+
+#Use bc to perform arithmetic, cat to pull data from files, and sed to filter out zeros
+printf '%.0f\n' $(echo "scale=3 ; `cat $brightness` / `cat $maxbrightness` * 100" | bc) 
 }
 
 #Sound Level
@@ -71,6 +80,7 @@ while :; do
 	buf="${buf}%{l}%{O10}$(groups)"
 	buf="${buf}%{c}$(clock)"
 	buf="${buf}%{r}Net: $(network) | "
+	buf="${buf}BL: $(backlight)% | "
 	buf="${buf}Vol: $(volume)% | "
 	buf="${buf}Bat: $(battery)%"
 	echo $buf
