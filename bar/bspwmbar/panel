@@ -1,0 +1,42 @@
+#! /bin/sh
+
+#variables
+PANEL_HEIGHT=25
+PANEL_FONT="Iosevka:size=8"
+PANEL_WM_NAME=bspwm_bar
+
+#start bar script
+if xdo id -a "$PANEL_WM_NAME" > /dev/null ; then
+	printf "%s\n" "The panel is already running." >&2
+	exit 1
+fi
+
+trap 'trap - TERM; kill 0' INT TERM QUIT EXIT
+
+[ -e "$PANEL_FIFO" ] && rm "$PANEL_FIFO"
+mkfifo "$PANEL_FIFO"
+
+#xtitle -sf 'T%s\n' > "$PANEL_FIFO" &
+volume() {
+    vol=$(amixer get Master | sed -n 's/^.*\[\([0-9]\+\)%.*$/\1/p'| uniq)
+printf "%s\n" "VVol:$vol%"
+}
+time() {
+    dt=$(date '+%A, %B %d, %Y | %H:%M:%S')
+printf "%s\n" "S$dt"
+}
+
+bspc subscribe report > "$PANEL_FIFO" &
+
+#----------------Update Times----------------------
+while :; do time; sleep 1s; done > "$PANEL_FIFO" &
+while :; do volume; sleep 0.5s; done > "$PANEL_FIFO" &
+#------------End Update Times----------------------
+. $HOME/sys-comps/bar/bspwmbar/panel_colors
+
+$HOME/sys-comps/bar/bspwmbar/panel_bar < "$PANEL_FIFO" | lemonbar -a 32 -u 2 -n "$PANEL_WM_NAME" -g x$PANEL_HEIGHT -f "$PANEL_FONT" -F "$COLOR_DEFAULT_FG" -B "$COLOR_DEFAULT_BG" | sh &
+
+wid=$(xdo id -m -a "$PANEL_WM_NAME")
+xdo above -t "$(xdo id -N Bspwm -n root | sort | head -n 1)" "$wid"
+
+wait
